@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Bon Commande</title>
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header, .footer {
+            /*background-color: #f2f2f2;*/
+            padding: 10px;
+            text-align: center;
+
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #e0e0e0;
+            padding: 20px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+            width: calc(100% - 220px);
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 210mm;
+            min-height: 197mm;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #000;
+            background: white;
+            box-sizing: border-box;
+        }
+
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-info img {
+            width: 100px;
+        }
+
+        .header-info .order-info {
+            text-align: right;
+        }
+
+        .header-info .order-info h2 {
+            margin: 0;
+        }
+
+        .supplier-info,
+        .company-info {
+            width: 45%;
+        }
+
+        .supplier-info {
+            float: right;
+            text-align: right;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+.mnht{
+    width: 110px;
+}
+        .table th,
+        .table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .totals {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .totals .total {
+            text-align: right;
+            margin-bottom: 5px;
+        }
+
+        .signature {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 12px;
+        }
+
+        .validate-button {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+
+        .validate-button:hover {
+            background-color: darkgreen;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 12px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            padding-top: 5px;
+            border-top: 1px solid #000;
+        }
+
+        .comment-section {
+            margin-top: 20px;
+            border: 1px solid #000;
+            padding: 10px;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body class="color-light">
+<div class="wrapper">
+    <div th:replace="header :: header"></div>
+    <div class="content-page">
+        <div class="container-fluid">
+            <!-- Start of Commande Content -->
+            <div th:if="${commandeValide}" class="alert alert-success" role="alert">
+                <div class="iq-alert-text">  <p th:text="${commandeValide}"></p> </div>
+            </div>
+            <br>
+            <div class="container">
+                <div class="header-info">
+                    <img src="../assets/images/unnamed.png" alt="logo" style="width:100%; max-width:150px;">
+                    <div class="order-info">
+                        <h6>BON DE COMMANDE : <span th:text="${idCommande}"></span></h6>
+                        <p><b>AFFAIRE :</b> ADM BACKBONE</p>
+                        <p><b>Date:</b> <span th:text="${#dates.format(date, 'dd/MM/yyyy')}"></span></p>
+                    </div>
+                </div>
+                <div class="company-info">
+                    <b><p>ENGELVIN MAROC</p>
+                        <p>ICE: 003390959000079</p></b>
+                    <p><i>SIEGE SOCIAL : 109 Route Bouskoura Drabna 2ème étage N°13</i></p>
+                    <i> <p>Tel : 05 20 63 01 27</p></i>
+                </div>
+                <div class="supplier-info">
+                    <p><b>Fournisseur : </b><label th:text="${nomFournisseur}"></label></p>
+                    <p><b>Adresse : </b><strong style="font-size: 13px;" th:text="${adresseFournisseur}"></strong></p>
+                    <p><b>Tel : &nbsp;</b><strong th:text="${telephoneFournisseur}"></strong></p>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Poste</th>
+                        <th>Désignation</th>
+                        <th>Unité</th>
+                        <th>Quantité</th>
+                        <th style="width:80px;">PU HT</th>
+                        <th class="mnht">Montant HT</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td th:text="${articleTitle}"></td>
+                        <td th:text="${unite}"></td>
+                        <td th:text="${quantite}"></td>
+<!--                        <td th:text="${prixUHT}"></td>-->
+                        <td th:text="${formatPrixHt}"></td>
+<!--                        <td th:text="${quantite*prixUHT}"></td>-->
+                        <td th:text="${montantHT}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="totals">
+                    <table style="margin-left: 200px;" border="1" class="totals-table">
+                        <tr>
+                            <td style="padding: 5px;" class="label">TOTAL MONTANT HT : </td>
+<!--                            <td style="padding: 5px;" th:text="${quantite*prixUHT}"></td>-->
+                            <td style="padding: 5px;" th:text="${montantHT}"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;" class="label">TVA 20% : </td>
+<!--                            <td style="padding: 5px;" th:text="${(quantite*prixUHT)*20/100}"></td>-->
+                            <td style="padding: 5px;" th:text="${tva}"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;" class="label">TOTAL MONTANT TTC : &nbsp;</td>
+<!--                            <td style="padding: 5px;" th:text="${(quantite*prixUHT)*1.2}"></td>-->
+                            <td style="padding: 5px;" th:text="${montantTotal}"></td>
+
+                        </tr>
+                    </table>
+                </div>
+                <div class="comment-section" th:if="${not #lists.isEmpty(commentaire)}">
+                    <p><b>Commentaires :</b></p>
+                    <p th:text="${commentaire}"></p>
+                </div>
+
+                <!--                <div class="comment-section">-->
+<!--                    <p><b>Commentaires :</b></p>-->
+<!--                    <p th:text="${commentaire}"></p>-->
+<!--                </div>-->
+                <div class="signature">
+                    <p><b>Signature</b> (Nom, Qualité et Cachet) :&nbsp;<b>A.OURHOU (chargé d'affaires)</b></p>
+                    <img style="width: 30%;margin-top: 10px;" src="../assets/images/signature.png" alt="signature">
+                </div>
+                <div class="footer">
+                    <p>SIEGE SOCIAL : 109 ROUTE BOUSKOURA DRABNA SIDI MAAROUF, CASABLANCA</p>
+                    <p>CAPITAL SOCIAL : 1 000 000.00 DH | IF : 54033660 RC : 601597 ICE : 003390959000079 TP : 32905329</p>
+                </div>
+            </div>
+
+            <form  th:if="${#authorization.expression('hasRole(''Directeur'')')}" method="post" th:switch="${validation}" th:action="@{/commande/valider/{idCommande}(idCommande=${idCommande})}">
+                <input  th:case="false"  class="validate-button" type="submit" value="Valider la Commande">
+                <input th:case="true" disabled class="validate-button"  style="background-color: darkblue" type="submit" value="Commande déjà validée">
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="footer :: footer"></div>
+<!-- Backend Bundle JavaScript -->
+<script src="../assets/js/backend-bundle.min.js"></script>
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/customizer.js"></script>
+<script src="../assets/js/sidebar.js"></script>
+<!-- Flextree Javascript-->
+<script src="../assets/js/flex-tree.min.js"></script>
+<script src="../assets/js/tree.js"></script>
+<!-- Table Treeview JavaScript -->
+<script src="../assets/js/table-treeview.js"></script>
+<!-- SweetAlert JavaScript -->
+<script src="../assets/js/sweetalert.js"></script>
+<!-- Vectoe Map JavaScript -->
+<script src="../assets/js/vector-map-custom.js"></script>
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/chart-custom.js"></script>
+<!-- slider JavaScript -->
+<script src="../assets/js/slider.js"></script>
+<!-- app JavaScript -->
+<script src="../assets/js/app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!doctype html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="utf-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+<!--    <title>Bon Commande</title>-->
+<!--    <link rel="shortcut icon" href="../assets/images/favicon.ico" />-->
+<!--    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">-->
+<!--    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--        }-->
+
+<!--        .page {-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            min-height: 100vh;-->
+<!--        }-->
+
+<!--        .header, .footer {-->
+<!--            /*background-color: #f2f2f2;*/-->
+<!--            padding: 10px;-->
+<!--            text-align: center;-->
+
+<!--        }-->
+
+<!--        .sidebar {-->
+<!--            width: 200px;-->
+<!--            background-color: #e0e0e0;-->
+<!--            padding: 20px;-->
+<!--            height: 100%;-->
+<!--            position: fixed;-->
+<!--            top: 0;-->
+<!--            left: 0;-->
+<!--        }-->
+
+<!--        .content {-->
+<!--            margin-left: 220px;-->
+<!--            padding: 20px;-->
+<!--            width: calc(100% - 220px);-->
+<!--            box-sizing: border-box;-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            width: 210mm;-->
+<!--            min-height: 297mm;-->
+<!--            margin: auto;-->
+<!--            padding: 20px;-->
+<!--            border: 1px solid #000;-->
+<!--            background: white;-->
+<!--            box-sizing: border-box;-->
+<!--        }-->
+
+<!--        .header-info {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+
+<!--        .header-info img {-->
+<!--            width: 100px;-->
+<!--        }-->
+
+<!--        .header-info .order-info {-->
+<!--            text-align: right;-->
+<!--        }-->
+
+<!--        .header-info .order-info h2 {-->
+<!--            margin: 0;-->
+<!--        }-->
+
+<!--        .supplier-info,-->
+<!--        .company-info {-->
+<!--            width: 45%;-->
+<!--        }-->
+
+<!--        .supplier-info {-->
+<!--            float: right;-->
+<!--            text-align: right;-->
+<!--        }-->
+
+<!--        .table {-->
+<!--            width: 100%;-->
+<!--            border-collapse: collapse;-->
+<!--            margin: 20px 0;-->
+<!--        }-->
+
+<!--        .table th,-->
+<!--        .table td {-->
+<!--            border: 1px solid #000;-->
+<!--            padding: 8px;-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        .table th {-->
+<!--            background-color: #f2f2f2;-->
+<!--        }-->
+
+<!--        .totals {-->
+<!--            width: 100%;-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+
+<!--        .totals .total {-->
+<!--            text-align: right;-->
+<!--            margin-bottom: 5px;-->
+<!--        }-->
+
+<!--        .signature {-->
+<!--            margin-top: 50px;-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        .footer {-->
+<!--            text-align: center;-->
+<!--            margin-top: 50px;-->
+<!--            font-size: 12px;-->
+<!--        }-->
+<!--        .validate-button {-->
+<!--                    display: block;-->
+<!--                    width: 200px;-->
+<!--                    padding: 10px;-->
+<!--                    background-color: green;-->
+<!--                    color: white;-->
+<!--                    text-align: center;-->
+<!--                    text-decoration: none;-->
+<!--                    font-size: 16px;-->
+<!--                    margin: 20px auto;-->
+<!--                    border-radius: 5px;-->
+
+<!--             }-->
+<!--             .validate-button:hover {-->
+<!--                                background-color: darkgreen;-->
+
+<!--                    }-->
+<!--                .footer {-->
+<!--                    text-align: center;-->
+<!--                    margin-top: 50px;-->
+<!--                    font-size: 12px;-->
+<!--                    position: relative;-->
+<!--                    bottom: 0;-->
+<!--                    width: 100%;-->
+<!--                    padding-top: 5px;-->
+<!--                    border-top: 1px solid #000;-->
+
+<!--                    }-->
+<!--    </style>-->
+<!--&lt;!&ndash;    <style>&ndash;&gt;-->
+<!--&lt;!&ndash;        @page {&ndash;&gt;-->
+<!--&lt;!&ndash;            size: A4;&ndash;&gt;-->
+<!--&lt;!&ndash;            margin: 0;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        body {&ndash;&gt;-->
+<!--&lt;!&ndash;            font-family: Arial, sans-serif;&ndash;&gt;-->
+<!--&lt;!&ndash;            margin: 0;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 0;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box {&ndash;&gt;-->
+<!--&lt;!&ndash;            width: 210mm;&ndash;&gt;-->
+<!--&lt;!&ndash;            min-height: 297mm;&ndash;&gt;-->
+<!--&lt;!&ndash;            margin: auto;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 20mm;&ndash;&gt;-->
+<!--&lt;!&ndash;            border: 1px solid #000;&ndash;&gt;-->
+<!--&lt;!&ndash;            box-sizing: border-box;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 14px;&ndash;&gt;-->
+<!--&lt;!&ndash;            line-height: 20px;&ndash;&gt;-->
+<!--&lt;!&ndash;            color: #000;&ndash;&gt;-->
+<!--&lt;!&ndash;            background: #fff;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box table {&ndash;&gt;-->
+<!--&lt;!&ndash;            width: 100%;&ndash;&gt;-->
+<!--&lt;!&ndash;            line-height: inherit;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-align: left;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-collapse: collapse;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box table td {&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 5px;&ndash;&gt;-->
+<!--&lt;!&ndash;            vertical-align: top;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box table tr.top table td {&ndash;&gt;-->
+<!--&lt;!&ndash;            padding-bottom: 10px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box table tr.information table td {&ndash;&gt;-->
+<!--&lt;!&ndash;            padding-bottom: 20px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box table tr.heading td {&ndash;&gt;-->
+<!--&lt;!&ndash;            background: #eee;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-bottom: 1px solid #000;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-weight: bold;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-align: center;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box table tr.details td {&ndash;&gt;-->
+<!--&lt;!&ndash;            padding-bottom: 10px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box table tr.item td {&ndash;&gt;-->
+<!--&lt;!&ndash;            border-bottom: 1px solid #000;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-align: center;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box table tr.item.last td {&ndash;&gt;-->
+<!--&lt;!&ndash;            border-bottom: none;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box table tr.total td {&ndash;&gt;-->
+<!--&lt;!&ndash;            text-align: right;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .invoice-box img {&ndash;&gt;-->
+<!--&lt;!&ndash;            max-width: 100%;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .totals-table {&ndash;&gt;-->
+<!--&lt;!&ndash;            width: 100%;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-collapse: collapse;&ndash;&gt;-->
+<!--&lt;!&ndash;            margin-top: 20px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .totals-table td {&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 5px;&ndash;&gt;-->
+<!--&lt;!&ndash;            border: 1px solid #000;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .totals-table .label {&ndash;&gt;-->
+<!--&lt;!&ndash;            text-align: right;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-weight: bold;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .validate-button {&ndash;&gt;-->
+<!--&lt;!&ndash;            display: block;&ndash;&gt;-->
+<!--&lt;!&ndash;            width: 200px;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 10px;&ndash;&gt;-->
+<!--&lt;!&ndash;            background-color: green;&ndash;&gt;-->
+<!--&lt;!&ndash;            color: white;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-align: center;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-decoration: none;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 16px;&ndash;&gt;-->
+<!--&lt;!&ndash;            margin: 20px auto;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-radius: 5px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .validate-button:hover {&ndash;&gt;-->
+<!--&lt;!&ndash;            background-color: darkgreen;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .footer {&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 10px;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-align: center;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-top: 1px solid #000;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding-top: 5px;&ndash;&gt;-->
+<!--&lt;!&ndash;            margin-top: 10px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .signature {&ndash;&gt;-->
+<!--&lt;!&ndash;            margin-top: 20px;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-align: right;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .signature img {&ndash;&gt;-->
+<!--&lt;!&ndash;            max-width: 200px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .bordered-section {&ndash;&gt;-->
+<!--&lt;!&ndash;            border: 1px solid #000;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 10px;&ndash;&gt;-->
+
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .large-table td {&ndash;&gt;-->
+<!--&lt;!&ndash;            height: 50px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;    </style>&ndash;&gt;-->
+<!--</head>-->
+<!--<body class="color-light">-->
+<!--<div class="wrapper">-->
+<!--    <div th:replace="header :: header"></div>-->
+<!--    <div class="content-page">-->
+<!--        <div class="container-fluid">-->
+<!--            &lt;!&ndash; Start of Commande Content &ndash;&gt;-->
+
+<!--            <div class="container">-->
+<!--                <div class="header-info">-->
+<!--                    <img src="../assets/images/unnamed.png" alt="logo" style="width:100%; max-width:150px;">-->
+<!--                    <div  class="order-info">-->
+<!--                        <h6>BON DE COMMANDE : <span th:text="${idCommande}"></span></h6>-->
+<!--                        <p><b>AFFAIRE :</b> ADM BACKBONE</p>-->
+<!--                        <p><b>Date:</b> <span th:text="${#dates.format(date, 'dd/MM/yyyy')}"></span></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="company-info">-->
+<!--                    <b><p>ENGELVIN MAROC</p>-->
+<!--                        <p>ICE: 003390959000079</p></b>-->
+<!--                    <p><i>SIEGE SOCIAL : 109 Route Bouskoura Drabna 2ème étage N°13</i></p>-->
+<!--                    <i> <p>Tel : 05 20 63 01 27</p></i>-->
+<!--                </div>-->
+<!--                <div class="supplier-info">-->
+<!--                   <p ><b>Fournisseur : </b><label th:text="${nomFournisseur}"></label></p>-->
+
+<!--                    <p><b>Adresse : </b><strong style="font-size: 13px;" th:text="${adresseFournisseur}"></strong></p>-->
+
+<!--                    <p><b>Tel : &nbsp;</b><strong th:text="${telephoneFournisseur}"></strong></p>-->
+<!--                </div>-->
+<!--                <table class="table">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th>Poste</th>-->
+<!--                        <th>Désignation</th>-->
+<!--                        <th>Unité</th>-->
+<!--                        <th>Quantité</th>-->
+<!--                        <th>PU HT</th>-->
+<!--                        <th>Montant HT</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr>-->
+<!--                        <td>1</td>-->
+<!--                                                <td th:text="${articleTitle}"></td>-->
+<!--                                                <td th:text="${unite}"></td>-->
+<!--                                                <td th:text="${quantite}"></td>-->
+<!--                                                <td th:text="${prixUHT}"></td>-->
+<!--                                                <td th:text="${quantite*prixUHT}"></td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--                <div class="totals">-->
+<!--                    <table style="margin-left: 200px; "  border="1" class="totals-table">-->
+<!--                                            <tr >-->
+<!--                                                <td style="padding: 5px;" class="label">TOTAL MONTANT HT : </td>-->
+<!--                                                <td style="padding: 5px;" th:text="${quantite*prixUHT}"></td>-->
+<!--                                            </tr>-->
+<!--                                            <tr>-->
+<!--                                                <td style="padding: 5px;" class="label">TVA 20% : </td>-->
+<!--                                                <td style="padding: 5px;" th:text="${(quantite*prixUHT)*20/100}"></td>-->
+<!--                                            </tr>-->
+<!--                                            <tr>-->
+<!--                                                <td style="padding: 5px;" class="label">TOTAL MONTANT TTC : &nbsp;</td>-->
+<!--                                                <td style="padding: 5px;" th:text="${(quantite*prixUHT)*1.2}"></td>-->
+<!--                                            </tr>-->
+<!--                                        </table>-->
+<!--                </div>-->
+<!--                <div class="signature">-->
+<!--                    <p><b>Signature</b> (Nom, Qualité et Cachet) :&nbsp;<b>A.OURHOU (chargé d'affaires)</b></p>-->
+<!--                    <img style="width: 30%;margin-top: 10px;" src="../assets/images/signature.png" alt="signature">-->
+<!--                </div>-->
+<!--                <div class="footer">-->
+<!--                    <p>SIEGE SOCIAL : 109 ROUTE BOUSKOURA DRABNA SIDI MAAROUF, CASABLANCA</p>-->
+<!--                    <p>CAPITAL SOCIAL : 1 000 000.00 DH | IF : 54033660	RC : 601597	ICE : 003390959000079	TP : 32905329</p>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--&lt;!&ndash;            <div class="invoice-box">&ndash;&gt;-->
+<!--&lt;!&ndash;                <table cellpadding="0" cellspacing="0">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <tr class="top">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td colspan="2">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <table>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <td class="title">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <img src="../assets/images/unnamed.png" alt="logo" style="width:100%; max-width:150px;">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <td style="align-content: end">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <strong>BON DE COMMANDE :</strong> <span th:text="${idCommande}">001234</span><br>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <strong>AFFAIRE :</strong> ALUM BACKBONE<br>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        Date: <span th:text="${#dates.format(date, 'dd/MM/yyyy')}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </table>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <tr class="information">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td colspan="2">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <table border="1" class="bordered-section">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <tr style="width: 100%">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <strong>ENGELVIN MAROC</strong><br>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        ID: 390304370000037<br>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        Siège Social: 350 Route Bouskoura Dernière Zone Aéroport<br>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        Casablanca<br>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        Tel: 0520 50 20 27&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <td >&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                        <label style=" font-weight: bold;">Fournisseur :</label>  <strong th:text="${nomFournisseur}">Fournisseur</strong><br>&ndash;&gt;-->
+<!--&lt;!&ndash;                                     <label style=" font-weight: bold;">  Adresse :</label>  <span th:text="${adresseFournisseur}">-&#45;&#45;</span><br>&ndash;&gt;-->
+<!--&lt;!&ndash;                                       <label style=" font-weight: bold;">Tel:</label> <span th:text="${telephoneFournisseur}">06 61 07 32 23</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </table>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <tr class="heading">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td>Poste</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td>Désignation</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td>Unité</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td>Quantité</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td>P.U HT</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td>Montant HT</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <tr class="item large-table">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td>1</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text="${articleTitle}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text="${unite}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text="${quantite}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text="${prixUHT}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text="${quantite*prixUHT}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                </table>&ndash;&gt;-->
+<!--&lt;!&ndash;                <table class="totals-table">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td class="label">TOTAL MONTANT HT:</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text="${quantite*prixUHT}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td class="label">TVA 20%:</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text="${(quantite*prixUHT)*20/100}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td class="label">TOTAL MONTANT TTC:</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text="${(quantite*prixUHT)*1.2}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                </table>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="signature">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <strong>Signature (Nom, Qualité et Cachet):</strong>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <img src="../assets/images/signature.png" alt="signature">&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="footer">&ndash;&gt;-->
+<!--&lt;!&ndash;                    SIEGE SOCIAL : 109 ROUTE BOUSKOURA DRABNA SIDI MAAROUF, CASABLANCA<br>&ndash;&gt;-->
+<!--&lt;!&ndash;                    CAPITAL SOCIAL : 1 000 000.00 DH | IF : 54033660 | RC : 601597 | ICE : 003390959000079 | TP : 32905329&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--            &lt;!&ndash; End of Commande Content &ndash;&gt;-->
+
+<!--            <form method="post" th:action="@{/commande/valider/{idCommande}(idCommande=${idCommande})}">-->
+<!--                <input class="validate-button" type="submit" value="Valider la Commande">-->
+<!--            </form>-->
+
+<!--            &lt;!&ndash;            <form  method="post" th:action="@{/commande/valider/${idCommande}}" >&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                <a type="submit" class="validate-button" >Valider la Commande</a>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                <input class=" btn btn-primary" type="submit" value="Ajouter">&ndash;&gt;-->
+<!--&lt;!&ndash;            </form>&ndash;&gt;-->
+
+<!--            &lt;!&ndash;            <a href="#" class="validate-button">Valider la Commande</a>&ndash;&gt;-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Backend Bundle JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/backend-bundle.min.js"></script>-->
+<!--&lt;!&ndash; Chart Custom JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/customizer.js"></script>-->
+<!--<script src="../assets/js/sidebar.js"></script>-->
+<!--&lt;!&ndash; Flextree Javascript&ndash;&gt;-->
+<!--<script src="../assets/js/flex-tree.min.js"></script>-->
+<!--<script src="../assets/js/tree.js"></script>-->
+<!--&lt;!&ndash; Table Treeview JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/table-treeview.js"></script>-->
+<!--&lt;!&ndash; SweetAlert JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/sweetalert.js"></script>-->
+<!--&lt;!&ndash; Vectoe Map JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/vector-map-custom.js"></script>-->
+<!--&lt;!&ndash; Chart Custom JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/chart-custom.js"></script>-->
+<!--<script src="../assets/js/charts/01.js"></script>-->
+<!--<script src="../assets/js/charts/02.js"></script>-->
+<!--&lt;!&ndash; slider JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/slider.js"></script>-->
+<!--&lt;!&ndash; Emoji picker &ndash;&gt;-->
+<!--<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>-->
+<!--&lt;!&ndash; app JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/app.js"></script>-->
+<!--</body>-->
+<!--</html>-->

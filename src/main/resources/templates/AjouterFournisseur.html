@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Nouveau Fournisseur</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">  </head>
+<body class=" color-light ">
+<!-- loader Start -->
+<div id="loading">
+    <div id="loading-center">
+    </div>
+</div>
+<!-- loader END -->
+<!-- Wrapper Start -->
+<div class="wrapper">
+    <div th:replace="header :: header"></div>
+    <div class="content-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 style="align-items: center;text-align: center"> Nouveau Fournisseur</h3>
+
+                </div>
+                <div class="col-lg-12 mt-5">
+<!--                    <div th:if="${msgFournisseurE}" class="alert alert-danger" role="alert">-->
+<!--                        <div class="iq-alert-text"><p th:text="${msgFournisseurE}"></p></div>-->
+<!--                    </div>-->
+                    <form th:action="@{saveFournisseur}" method="post" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <label for="nom">Nom </label>
+                            <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="text" class="form-control" id="email" name="email"
+                                   placeholder="Adresse mail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone">Téléphone</label>
+                            <input type="text" class="form-control" id="telephone" name="telephone"
+                                   placeholder="Téléphone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adresse">Adresse</label>
+                            <input type="text" class="form-control" id="adresse" name="adresse" placeholder="Adresse" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                        <a href="fournisseursList" class="btn bg-danger">Annuler</a>
+                    </form>
+                </div>
+                <!-- Modal pour les erreurs -->
+                <div th:if="${msgFournisseurE}" class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="errorModalLabel">Erreur de modification</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p th:text="${msgFournisseurE}"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${messageFournisseurA}" class="alert alert-success" role="alert">
+                    <div class="iq-alert-text">  <p th:text="${messageFournisseurA}"></p> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Wrapper End-->
+<div th:replace="footer :: footer"></div>
+<!-- Backend Bundle JavaScript -->
+<script src="../assets/js/backend-bundle.min.js"></script>
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/customizer.js"></script>
+
+<script src="../assets/js/sidebar.js"></script>
+
+<!-- Flextree Javascript-->
+<script src="../assets/js/flex-tree.min.js"></script>
+<script src="../assets/js/tree.js"></script>
+
+<!-- Table Treeview JavaScript -->
+<script src="../assets/js/table-treeview.js"></script>
+
+<!-- SweetAlert JavaScript -->
+<script src="../assets/js/sweetalert.js"></script>
+
+<!-- Vectoe Map JavaScript -->
+<script src="../assets/js/vector-map-custom.js"></script>
+
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/chart-custom.js"></script>
+<script src="../assets/js/charts/01.js"></script>
+<script src="../assets/js/charts/02.js"></script>
+
+<!-- slider JavaScript -->
+<script src="../assets/js/slider.js"></script>
+
+<!-- Emoji picker -->
+<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>
+
+
+<!-- app JavaScript -->
+<script src="../assets/js/app.js"></script>
+<script>
+    $(document).ready(function() {
+        // Check if the flash attribute message is present
+        var message = /*[[${message}]]*/ '';
+        if (message !== '') {
+            alert(message);  // Display a popup alert with the message
+        }
+    });
+</script>
+
+<script>
+    function validateForm() {
+        const nom = document.getElementById('nom').value;
+
+        const email = document.getElementById('email').value;
+        const regex = /^[a-zA-Z\s]*$/;
+        const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+        if (!regex.test(nom)) {
+            alert("Le nom ne doit contenir que des lettres et des espaces.");
+            return false;
+        }
+
+        if (!emailRegex.test(email)) {
+            alert("Format de l'email invalide.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+<!-- Script pour afficher le modal automatiquement si messagePE est présent -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#errorModal').modal('show');
+        }
+    });
+</script>
+
+</body>
+</html>

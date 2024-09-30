@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Engelvin Maroc</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/logo1.png" />
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">
+    <style>
+        .card {
+            box-shadow: 0 4px 8px rgba(10, 100, 255, 0.2);
+            border: 1px solid #ddd;
+        }
+
+    </style>
+</head>
+<body>
+<!-- Loader Start -->
+<div id="loading">
+    <div id="loading-center"></div>
+</div>
+<!-- Loader END -->
+
+<!-- Wrapper Start -->
+<div class="wrapper">
+    <!-- Header -->
+    <div th:replace="header :: header"></div>
+
+    <!-- Content Page -->
+    <div class="content-page">
+        <div class="container-fluid">
+            <!-- Statistiques Header -->
+            <div class="row">
+                <div class="col-md-12 mb-4 mt-1">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center">
+                        <h4 class="font-weight-bold">Statistiques</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistiques Cards -->
+            <div class="row">
+                <div class="col-m-8 col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <p class="mb-2 text-secondary">Fournisseurs</p>
+                                            <div class="d-flex flex-wrap justify-content-start align-items-center">
+                                                <h5 th:text="${fournisseursVue}" class="mb-0 font-weight-bold">10</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <p class="mb-2 text-secondary">Articles</p>
+                                            <div class="d-flex flex-wrap justify-content-start align-items-center">
+                                                <h5 th:text="${articlesVueSize}" class="mb-0 font-weight-bold">12</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <p class="mb-2 text-secondary">Commandes Validées</p>
+                                            <div class="d-flex flex-wrap justify-content-start align-items-center">
+                                                <h5 th:text="${commandesValide}" class="mb-0 font-weight-bold">13</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <p class="mb-2 text-secondary">Commande Non validé</p>
+                                            <div class="d-flex flex-wrap justify-content-start align-items-center">
+                                                <h5 th:text="${commandesNonValide}" class="mb-0 font-weight-bold">12</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+<!--                <div style="width: 70%; align-items: center; align-content: center; height: 35%">-->
+<!--                    <canvas id="commandesChart"></canvas>-->
+<!--                </div>-->
+            </div>
+            <div class="row">
+                <div class="col-m-8 col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">Statistiques des Commandes par Mois et Année</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="commandesChart"></canvas>
+                    </div>
+                </div>
+                </div>
+            </div>
+<!--            <div class="row">-->
+<!--                <table>-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th>Produit</th>-->
+<!--                        <th>Quantité Totale Commandée</th>-->
+<!--                        <th>Nombre de Commandes</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr th:each="product : ${products}">-->
+<!--                        <td th:text="${product[0]}">Nom du produit</td>-->
+<!--                        <td th:text="${product[1]}">Quantité totale</td>-->
+<!--                        <td th:text="${product[2]}">Nombre de commandes</td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--                <table class="table align-middle mb-0 bg-white">-->
+<!--                    <thead class="bg-light">-->
+<!--                    <tr>-->
+<!--                        <th>Article</th>-->
+<!--                        <th>Quantité Totale Commandée</th>-->
+<!--                        <th>Nombre de Commandes</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr th:each="product : ${products}">-->
+<!--                        <td th:text="${product[0]}">Nom du produit</td>-->
+<!--                        <td th:text="${product[1]}">Quantité totale</td>-->
+<!--                        <td th:text="${product[2]}">Nombre de commandes</td>-->
+<!--                    </tr>-->
+
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+            <!-- Page End -->
+        </div>
+    </div>
+</div>
+<!-- Wrapper End -->
+<div th:replace="footer :: footer"></div>
+<!-- Footer -->
+<!--<footer class="iq-footer">-->
+<!--    <div class="container-fluid">-->
+<!--        <div class="row">-->
+<!--            <div class="col-lg-6">-->
+<!--                <ul class="list-inline mb-0">-->
+<!--                    <li class="list-inline-item"><a href="../backend/privacy-policy.html">Privacy Policy</a></li>-->
+<!--                    <li class="list-inline-item"><a href="../backend/terms-of-service.html">Terms of Use</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--            <div class="col-lg-6 text-right">-->
+<!--            <span class="mr-1">-->
+<!--              Copyright-->
+<!--              <script>document.write(new Date().getFullYear())</script>© <a href="#" class="">Datum</a>-->
+<!--              All Rights Reserved.-->
+<!--            </span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</footer>-->
+
+<!-- JavaScript Files -->
+<script src="../assets/js/backend-bundle.min.js"></script>
+<script src="../assets/js/customizer.js"></script>
+<script src="../assets/js/sidebar.js"></script>
+<script src="../assets/js/flex-tree.min.js"></script>
+<script src="../assets/js/tree.js"></script>
+<script src="../assets/js/table-treeview.js"></script>
+<script src="../assets/js/sweetalert.js"></script>
+<script src="../assets/js/vector-map-custom.js"></script>
+<script src="../assets/js/chart-custom.js"></script>
+<script src="../assets/js/charts/01.js"></script>
+<script src="../assets/js/charts/02.js"></script>
+<script src="../assets/js/slider.js"></script>
+<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>
+<script src="../assets/js/app.js"></script>
+<!--<script>-->
+<!--    async function fetchData() {-->
+<!--        const response = await fetch('/api/commandes/statistiques');-->
+<!--        const data = await response.json();-->
+<!--        return data;-->
+<!--    }-->
+
+<!--    async function renderChart() {-->
+<!--        const data = await fetchData();-->
+<!--        const ctx = document.getElementById('commandesChart').getContext('2d');-->
+<!--        const labels = Object.keys(data).map(key => `Mois ${key}`);-->
+<!--        const values = Object.values(data);-->
+
+<!--        const commandesChart = new Chart(ctx, {-->
+<!--            type: 'bar',-->
+<!--            data: {-->
+<!--                labels: labels,-->
+<!--                datasets: [{-->
+<!--                    label: 'Commandes par Mois',-->
+<!--                    data: values,-->
+<!--                    backgroundColor: 'rgba(75, 192, 192, 0.2)',-->
+<!--                    borderColor: 'rgba(75, 192, 192, 1)',-->
+<!--                    borderWidth: 1-->
+<!--                }]-->
+<!--            },-->
+<!--            options: {-->
+<!--                scales: {-->
+<!--                    y: {-->
+<!--                        beginAtZero: true,-->
+<!--                        ticks: {-->
+<!--                            stepSize: 1-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+
+<!--    renderChart();-->
+<!--</script>-->
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+    async function fetchData() {
+        const response = await fetch('/api/commandes/statistiques');
+        const data = await response.json();
+        return data;
+    }
+
+    async function renderChart() {
+        const data = await fetchData();
+        const ctx = document.getElementById('commandesChart').getContext('2d');
+
+        const datasets = [];
+        Object.keys(data).forEach(year => {
+            const months = Array(12).fill(0);
+            Object.keys(data[year]).forEach(month => {
+                months[month - 1] = data[year][month];
+            });
+            datasets.push({
+                label: `Année ${year}`,
+                data: months,
+                backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.2)`,
+                borderColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`,
+                borderWidth: 0.5
+            });
+        });
+
+        const commandesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: datasets
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    renderChart();
+</script>
+
+</body>
+</html>

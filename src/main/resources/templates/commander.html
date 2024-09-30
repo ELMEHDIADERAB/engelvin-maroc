@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Commander</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">
+</head>
+<body class=" color-light ">
+<!-- loader Start -->
+<div id="loading">
+    <div id="loading-center">
+    </div>
+</div>
+<!-- loader END -->
+<!-- Wrapper Start -->
+<div class="wrapper">
+    <div th:replace="header :: header"></div>
+    <div class="content-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 style="text-align: center"> Commander un Article</h3>
+
+                </div>
+                <div class="col-lg-12 mt-5">
+                    <form th:action="@{ajouterCommande}" method="post">
+
+
+                        <div class="form-group">
+                            <label for="article">Article</label>
+                            <select class="form-control" id="article" name="article" required>
+                                <option value="" disabled selected>Choisir un Article</option>
+                                <option th:each="article : ${articlesVue}"
+                                        th:value="${article.id}"
+                                        th:text="${article.title}">Article</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantite">Quantité</label>
+                            <input required  type="number" class="form-control" id="quantite" name="quantite"
+                                   placeholder="Quantité">
+                        </div>
+                        <div class="form-group">
+                            <label for="commentaire">Commentaire</label>
+                            <input type="text" class="form-control" id="commentaire" name="commentaire"
+                                   placeholder="commentaire">
+                        </div>
+
+                        <input class=" btn btn-primary" type="submit" value="Commander">
+                        <!--                         <button type="submit" class="btn btn-primary">Ajouter</button>-->
+                        <a href="commande" class="btn bg-danger">Annuler</a>
+                    </form>
+                </div>
+
+            </div><br>
+            <div th:if="${messageCommande}" class="alert alert-success" role="alert">
+                <div class="iq-alert-text">  <p th:text="${messageCommande}"></p> </div>
+            </div>
+            <div th:if="${msgQuantite}" class="alert alert-warning" role="alert">
+                <div class="iq-alert-text">  <p th:text="${msgQuantite}"></p> </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Wrapper End-->
+<div th:replace="footer :: footer"></div>
+<!-- Backend Bundle JavaScript -->
+<script src="../assets/js/backend-bundle.min.js"></script>
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/customizer.js"></script>
+
+<script src="../assets/js/sidebar.js"></script>
+
+<!-- Flextree Javascript-->
+<script src="../assets/js/flex-tree.min.js"></script>
+<script src="../assets/js/tree.js"></script>
+
+<!-- Table Treeview JavaScript -->
+<script src="../assets/js/table-treeview.js"></script>
+
+<!-- SweetAlert JavaScript -->
+<script src="../assets/js/sweetalert.js"></script>
+
+<!-- Vectoe Map JavaScript -->
+<script src="../assets/js/vector-map-custom.js"></script>
+
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/chart-custom.js"></script>
+<script src="../assets/js/charts/01.js"></script>
+<script src="../assets/js/charts/02.js"></script>
+
+<!-- slider JavaScript -->
+<script src="../assets/js/slider.js"></script>
+
+<!-- Emoji picker -->
+<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>
+
+
+<!-- app JavaScript -->
+<script src="../assets/js/app.js"></script>
+
+<script>
+    $(document).ready(function() {
+        if ($('.alert').length) {
+            setTimeout(function() {
+                $('.alert').fadeOut();
+            }, 5000); // L'alerte disparaît après 5 secondes
+        }
+    });
+</script>
+
+<!--<script>-->
+<!--    document.getElementById('quantite').addEventListener('input', function (e) {-->
+<!--        if (e.target.value < 1) {-->
+<!--            e.target.setCustomValidity('La quantité doit être supérieure ou égale à 1');-->
+<!--        } else {-->
+<!--            e.target.setCustomValidity('');-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+
+</body>
+</html>

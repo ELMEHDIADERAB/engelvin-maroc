@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">
+    <title>Fournisseurs</title>
+</head>
+<style>
+    .table {
+        width: 92%;
+        margin-bottom: 1.25rem;
+        color: #324253;
+        margin-left: 45px;
+        margin-right: 100px;
+        margin-top: 50px;
+    }
+    .form-inline {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin: 20px 45px;
+    }
+</style>
+<body class="  ">
+<!-- loader Start -->
+<div id="loading">
+    <div id="loading-center">
+    </div>
+</div>
+<!-- loader END -->
+<!-- Wrapper Start -->
+<div class="wrapper">
+    <div th:replace="header :: header"></div>
+
+    <div class="content-page">
+        <div class="form-inline">
+            <a href="/ajouterFournisseur" class="btn btn-primary">Nouveau Fourniseur</a>
+        </div>
+<!--        <div th:if="${messageFournisseurA}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${messageFournisseurA}"></p> </div>-->
+<!--        </div>-->
+<!--        <div th:if="${messageFournisseurS}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${messageFournisseurS}"></p> </div>-->
+<!--        </div>-->
+<!--        <div th:if="${messageFournisseurE}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${messageFournisseurE}"></p> </div>-->
+<!--        </div>-->
+        <table id="table" class="table data-table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Action</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fournisseur:${fournisseursVue}">
+                <td th:text="${fournisseur.nom}"></td>
+                <td th:text="${fournisseur.email}"></td>
+                <td th:text="${fournisseur.telephone}"></td>
+                <td th:text="${fournisseur.adresse}"></td>
+                <td>
+                    <a class="btn btn-sm btn-outline-danger" th:href="@{deleteFournisseur(id=${fournisseur.id})}" onclick="return confirm('Voulez vraiment supprime !')">Supprimer</a>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-secondary" th:href="@{editFournisseur(id=${fournisseur.id})}" >Modifier</a>
+                </td>
+
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Modal pour message ajoute reussi -->
+    <div th:if="${messageFournisseurA}" class="modal fade" id="modelA" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalALabel">Ajout Réussi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p th:text="${messageFournisseurA}"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal pour mesage suppression -->
+    <div th:if="${messageFournisseurS}" class="modal fade" id="SuppressionModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="SuppressionModalLabel">Suppression Réussie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p th:text="${messageFournisseurS}"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal pour message modification-->
+    <div th:if="${messageFournisseurE}" class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Modification Réussie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p th:text="${messageFournisseurE}"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="footer :: footer"></div>
+<script src="../assets/js/backend-bundle.min.js"></script>
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/customizer.js"></script>
+
+<script src="../assets/js/sidebar.js"></script>
+
+<!-- Flextree Javascript-->
+<script src="../assets/js/flex-tree.min.js"></script>
+<script src="../assets/js/tree.js"></script>
+
+<!-- Table Treeview JavaScript -->
+<script src="../assets/js/table-treeview.js"></script>
+
+<!-- SweetAlert JavaScript -->
+<script src="../assets/js/sweetalert.js"></script>
+
+<!-- Vectoe Map JavaScript -->
+<script src="../assets/js/vector-map-custom.js"></script>
+
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/chart-custom.js"></script>
+<script src="../assets/js/charts/01.js"></script>
+<script src="../assets/js/charts/02.js"></script>
+
+<!-- slider JavaScript -->
+<script src="../assets/js/slider.js"></script>
+
+<!-- Emoji picker -->
+<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>
+
+
+<!-- app JavaScript -->
+<script src="../assets/js/app.js"></script>
+<!-- DataTables French language file -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"></script>
+
+<script>
+    $(document).ready(function() {
+        // Check if the flash attribute message is present
+        var message = /*[[${message}]]*/ '';
+        if (message !== '') {
+            alert(message);  // Display a popup alert with the message
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $("#loading").fadeOut();
+
+        // Détruire l'instance existante de DataTables si elle existe
+        if ($.fn.DataTable.isDataTable('#table')) {
+            $('#table').DataTable().destroy();
+        }
+
+        // Initialiser DataTables
+        $('#table').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"
+            }
+        });
+
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
+<!-- Script pour afficher le modal automatiquement si messagePE est présent -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#errorModal').modal('show');
+        }
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#SuppressionModal').modal('show');
+        }
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#modelA').modal('show');
+        }
+    });
+</script>
+</body>
+</html>

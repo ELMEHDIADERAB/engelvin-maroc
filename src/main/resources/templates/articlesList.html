@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">
+    <title>Articles</title>
+    <style>
+        .table {
+            width: 92%;
+            margin-bottom: 1.25rem;
+            color: #324253;
+            margin-left: 45px;
+            margin-right: 100px;
+            margin-top: 50px;
+        }
+        .form-inline {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin: 20px 45px;
+        }
+        .form-control {
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body class="  ">
+<!-- loader Start -->
+<div id="loading">
+    <div id="loading-center">
+    </div>
+</div>
+<!-- loader END -->
+<!-- Wrapper Start -->
+<div class="wrapper">
+    <div th:replace="header :: header"></div>
+
+    <div class="content-page">
+        <div class="form-inline">
+            <label>Chercher article par fournisseur</label>&nbsp;&nbsp;
+            <form th:action="@{/articlesList}" method="post">
+                <select class="form-control mr-2" id="fournisseur" name="fournisseur" onchange="this.form.submit()">
+                    <option value="" disabled th:selected="${selectedFournisseur == null}">Chercher par fournisseur</option>
+                    <option th:each="fournisseur : ${fournisseurs}"
+                            th:value="${fournisseur.id}"
+                            th:selected="${selectedFournisseur != null and fournisseur.id == selectedFournisseur.id}"
+                            th:text="${fournisseur.nom}">
+                    </option>
+                </select>
+            </form>
+            <a href="/ajouterArticle" class="btn btn-primary">Nouveau Article</a>
+        </div>
+        <!-- Modal pour message ajoute reussi -->
+        <div th:if="${messageArticleA}" class="modal fade" id="modelA" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalALabel">Ajout Réussi</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p th:text="${messageArticleA}"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal pour mesage suppression -->
+        <div th:if="${messageArticleS}" class="modal fade" id="SuppressionModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="SuppressionModalLabel">Suppression Réussie</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p th:text="${messageArticleS}"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal pour message modification-->
+        <div th:if="${messageArticleE}" class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="errorModalLabel">Modification Réussie</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p th:text="${messageArticleE}"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!------->
+<!--        <div th:if="${messageArticleA}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text"><p th:text="${messageArticleA}"></p></div>-->
+<!--        </div>-->
+<!--        <div th:if="${messageArticleS}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text"><p th:text="${messageArticleS}"></p></div>-->
+<!--        </div>-->
+<!--        <div th:if="${messageArticleE}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text"><p th:text="${messageArticleE}"></p></div>-->
+<!--        </div>-->
+
+
+        <table id="datatable" class="table data-table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Désignation</th>
+                <th scope="col">Unité</th>
+                <th scope="col">Prix Unitaire HT</th>
+                <th scope="col">Action</th>
+                <th  scope="colgroup"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="article : ${articlesVue}">
+                <td th:text="${article.title}"></td>
+                <td th:text="${article.unite}"></td>
+                <td th:text="${article.prix_Unitaire_HT}"></td>
+                <td>
+                    <a class="btn btn-outline-danger" th:href="@{deleteArticle(id=${article.id})}" onclick="return confirm('Voulez-vous vraiment supprimer ?')">Supprimer</a>
+                </td>
+                <td>
+                    <a class="btn btn-outline-secondary" th:href="@{editArticle(id=${article.id})}">Modifier</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div style="align-items: center ;text-align: center;margin-top: 40px;" th:if="${noArticlesMessage}" class="no-articles-message">
+            <p th:text="${noArticlesMessage}"></p>
+        </div>
+    </div>
+</div>
+<div th:replace="footer :: footer"></div>
+<script src="../assets/js/backend-bundle.min.js"></script>
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/customizer.js"></script>
+
+<script src="../assets/js/sidebar.js"></script>
+
+<!-- Flextree Javascript-->
+<script src="../assets/js/flex-tree.min.js"></script>
+<script src="../assets/js/tree.js"></script>
+
+<!-- Table Treeview JavaScript -->
+<script src="../assets/js/table-treeview.js"></script>
+
+<!-- SweetAlert JavaScript -->
+<script src="../assets/js/sweetalert.js"></script>
+
+<!-- Vectoe Map JavaScript -->
+<script src="../assets/js/vector-map-custom.js"></script>
+
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/chart-custom.js"></script>
+<script src="../assets/js/charts/01.js"></script>
+<script src="../assets/js/charts/02.js"></script>
+
+<!-- slider JavaScript -->
+<script src="../assets/js/slider.js"></script>
+
+<!-- Emoji picker -->
+<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"></script>
+<!-- app JavaScript -->
+<script src="../assets/js/app.js"></script>
+<script>
+    $(document).ready(function() {
+        // Check if the flash attribute message is present
+        var message = /*[[${message}]]*/ '';
+        if (message !== '') {
+            alert(message);  // Display a popup alert with the message
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#loading").fadeOut();
+
+        // Détruire l'instance existante de DataTables si elle existe
+        if ($.fn.DataTable.isDataTable('#datatable')) {
+            $('#datatable').DataTable().destroy();
+        }
+
+        // Initialiser DataTables
+        $('#datatable').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"
+            }
+        });
+
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
+<!-- Script pour afficher le modal automatiquement si messagePE est présent -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#errorModal').modal('show');
+        }
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#SuppressionModal').modal('show');
+        }
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#modelA').modal('show');
+        }
+    });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+
+<!--    &lt;!&ndash; Favicon &ndash;&gt;-->
+<!--    <link rel="shortcut icon" href="../assets/images/favicon.ico" />-->
+
+<!--    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">-->
+<!--    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">-->
+<!--    <title>Articles</title>-->
+<!--    <style>-->
+<!--        .table {-->
+<!--            width: 92%;-->
+<!--            margin-bottom: 1.25rem;-->
+<!--            color: #324253;-->
+<!--            margin-left: 45px;-->
+<!--            margin-right: 100px;-->
+<!--            margin-top: 50px;-->
+<!--        }-->
+<!--        /*.right-aligned {*/-->
+<!--        /*    align-items: end;*/-->
+<!--        /*    margin-right: 45px;*/-->
+<!--        /*}*/-->
+<!--        /*.btn-container {*/-->
+<!--        /*    display: flex;*/-->
+<!--        /*    justify-content: flex-end;*/-->
+<!--        /*    margin: 20px 45px;*/-->
+<!--        /*}*/-->
+<!--        .form-inline {-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: flex-end;-->
+<!--            margin: 20px 45px;-->
+<!--        }-->
+<!--        .form-control{-->
+<!--            align-items: center;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body class="  ">-->
+<!--&lt;!&ndash; loader Start &ndash;&gt;-->
+<!--<div id="loading">-->
+<!--    <div id="loading-center">-->
+<!--    </div>-->
+<!--</div>-->
+<!--&lt;!&ndash; loader END &ndash;&gt;-->
+<!--&lt;!&ndash; Wrapper Start &ndash;&gt;-->
+<!--<div class="wrapper">-->
+<!--    <div th:replace="header :: header"></div>-->
+
+<!--    <div class="content-page">-->
+<!--        <div class="form-inline">-->
+<!--            <label>Chercher article par fournisseur</label>&nbsp;&nbsp;-->
+<!--            <form th:action="@{/articlesList}" method="post">-->
+<!--                <select class="form-control mr-2" id="fournisseur" name="fournisseur" onchange="this.form.submit()">-->
+<!--                    <option value="" disabled selected>Chercher par fournisseur</option>-->
+<!--                    <option th:each="fournisseur : ${fournisseurs}"-->
+<!--                            th:value="${fournisseur.id}"-->
+<!--                            th:text="${fournisseur.nom}"-->
+
+<!--                    >Fournisseur</option>-->
+<!--                </select>-->
+<!--            </form>-->
+<!--            <a href="/ajouterArticle" class="btn btn-primary">Nouveau Article</a>-->
+<!--        </div>-->
+<!--        <div th:if="${messageArticleA}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${messageArticleA}"></p> </div>-->
+<!--        </div>-->
+<!--        <div th:if="${messageArticleS}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${messageArticleS}"></p> </div>-->
+<!--        </div>-->
+<!--        <div th:if="${messageArticleE}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${messageArticleE}"></p> </div>-->
+<!--        </div>-->
+<!--        <table class="table">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th scope="col">Désignation</th>-->
+<!--                <th scope="col">Unité</th>-->
+<!--                <th scope="col">Prix Unitaire HT</th>-->
+<!--                <th th:if="${#authorization.expression('hasRole(''Manager'')')}"  scope="col">Action</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="article:${articlesVue}">-->
+<!--                <td th:text="${article.title}"></td>-->
+<!--                <td th:text="${article.unite}"></td>-->
+<!--                <td th:text="${article.prix_Unitaire_HT}"></td>-->
+<!--                <td>-->
+<!--&lt;!&ndash;                <td th:if="${#authorization.expression('hasRole(''Manager'')')}">&ndash;&gt;-->
+<!--                    <a class="btn btn-outline-danger" th:href="@{deleteArticle(id=${article.id})}" onclick="return confirm('Voulez-vous vraiment supprimer ?')">Supprimer</a>-->
+<!--                </td>-->
+<!--                <td >-->
+<!--&lt;!&ndash;                <td th:if="${#authorization.expression('hasRole(''Manager'')')}">&ndash;&gt;-->
+<!--                    <a class="btn btn-outline-secondary" th:href="@{editArticle(id=${article.id})}">Modifier</a>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div th:replace="footer :: footer"></div>-->
+<!--<script src="../assets/js/backend-bundle.min.js"></script>-->
+<!--&lt;!&ndash; Chart Custom JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/customizer.js"></script>-->
+
+<!--<script src="../assets/js/sidebar.js"></script>-->
+
+<!--&lt;!&ndash; Flextree Javascript&ndash;&gt;-->
+<!--<script src="../assets/js/flex-tree.min.js"></script>-->
+<!--<script src="../assets/js/tree.js"></script>-->
+
+<!--&lt;!&ndash; Table Treeview JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/table-treeview.js"></script>-->
+
+<!--&lt;!&ndash; SweetAlert JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/sweetalert.js"></script>-->
+
+<!--&lt;!&ndash; Vectoe Map JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/vector-map-custom.js"></script>-->
+
+<!--&lt;!&ndash; Chart Custom JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/chart-custom.js"></script>-->
+<!--<script src="../assets/js/charts/01.js"></script>-->
+<!--<script src="../assets/js/charts/02.js"></script>-->
+
+<!--&lt;!&ndash; slider JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/slider.js"></script>-->
+
+<!--&lt;!&ndash; Emoji picker &ndash;&gt;-->
+<!--<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>-->
+
+<!--&lt;!&ndash; app JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/app.js"></script>-->
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--        // Check if the flash attribute message is present-->
+<!--        var message = /*[[${message}]]*/ '';-->
+<!--        if (message !== '') {-->
+<!--            alert(message);  // Display a popup alert with the message-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+
+    <title>Commandes</title>
+</head>
+<style>
+    .table {
+        width: 92%;
+        margin: 50px auto;
+        color: #324253;
+    }
+    .form-inline {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin: 20px 45px;
+    }
+</style>
+<body>
+<!-- Loader Start -->
+<div id="loading">
+    <div id="loading-center"></div>
+</div>
+<!-- Loader END -->
+<!-- Wrapper Start -->
+<div class="wrapper">
+    <div th:replace="header :: header"></div>
+    <div class="content-page">
+        <div  class="form-inline">
+            <a th:if="${#authorization.expression('hasRole(''Directeur'')')}" href="/commander" class="btn btn-primary">Nouvelle Commande</a>
+        </div>
+        <div th:if="${messageCommandeValide}" class="alert alert-success" role="alert">
+            <div class="iq-alert-text"><p th:text="${messageCommandeValide}"></p></div>
+        </div>
+        <table id="table" class="table data-table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th scope="col" style="display:none;">Date Sort</th>
+                <th scope="col">Id</th>
+                <th scope="col">Article</th>
+                <th scope="col">Quantité</th>
+                <th scope="col">Statut</th>
+                <th scope="col">Date</th>
+
+                <th scope="col">Détails</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="commande : ${commandesVue}">
+                <td th:text="${#dates.format(commande[2], 'yyyy-MM-dd')}" style="display:none;"></td>
+                <td th:text="${commande[0]}"></td>
+                <td th:text="${commande[3]}"></td>
+                <td th:text="${commande[1]}"></td>
+                <td th:switch="${commande[6]}">
+                    <span th:case="true" style="color: #2b8420;">Validé</span>
+                    <span th:case="false" style="color: #6c757d;">En cours</span>
+                </td>
+                <td th:text="${#dates.format(commande[2], 'dd MMMM yyyy')}"></td>
+
+                <td>
+                    <a class="btn btn-sm btn-outline-success" th:href="@{BonCommande(id=${commande[0]})}">Voir</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <b style="color: #bd2130;text-align: center;align-items: center;align-content: center">  <span th:if="${msgcommandevide}" th:text="${msgcommandevide}"></span></b>
+    </div>
+</div>
+<div th:if="${messageCommande}" class="modal fade" id="commandeModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commandeModalLabel">Commande</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p th:text="${messageCommande}"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="footer :: footer"></div>
+
+<script src="../assets/js/backend-bundle.min.js"></script>
+<script src="../assets/js/customizer.js"></script>
+<script src="../assets/js/sidebar.js"></script>
+<script src="../assets/js/flex-tree.min.js"></script>
+<script src="../assets/js/tree.js"></script>
+<script src="../assets/js/table-treeview.js"></script>
+<script src="../assets/js/sweetalert.js"></script>
+<script src="../assets/js/vector-map-custom.js"></script>
+<script src="../assets/js/chart-custom.js"></script>
+<script src="../assets/js/charts/01.js"></script>
+<script src="../assets/js/charts/02.js"></script>
+<script src="../assets/js/slider.js"></script>
+<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>
+<script src="../assets/js/app.js"></script>
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"></script>
+
+<script>
+    $(document).ready(function() {
+        // Hide loading screen
+        $("#loading").fadeOut();
+
+        // Initialize DataTables
+        if ($.fn.DataTable.isDataTable('#table')) {
+            $('#table').DataTable().destroy();
+        }
+        $('#table').DataTable({
+            "order": [],
+            "columnDefs": [
+                {
+                    "targets": 0,
+                    "orderable": false
+                }
+            ],
+            "pageLength": 10,
+            "lengthMenu": [5, 10, 25, 50],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"
+            }
+        });
+
+        // Enable popovers
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
+<!-- Script pour afficher le modal automatiquement si messagePE est présent -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#commandeModal').modal('show');
+        }
+
+    });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+
+<!--    &lt;!&ndash; Favicon &ndash;&gt;-->
+<!--    <link rel="shortcut icon" href="../assets/images/favicon.ico" />-->
+
+<!--    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">-->
+<!--    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">-->
+<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>-->
+
+<!--    <title>commandes</title>-->
+<!--</head>-->
+<!--<style>-->
+<!--    .table {-->
+<!--        width: 92%;-->
+<!--        margin-bottom: 1.25rem;-->
+<!--        color: #324253;-->
+<!--        margin-left: 45px;-->
+<!--        margin-right: 100px;-->
+<!--        margin-top: 50px;-->
+<!--    }-->
+<!--    .form-inline {-->
+<!--        display: flex;-->
+<!--        align-items: center;-->
+<!--        justify-content: flex-end;-->
+<!--        margin: 20px 45px;-->
+<!--    }-->
+<!--</style>-->
+<!--<body class="  ">-->
+<!--&lt;!&ndash; loader Start &ndash;&gt;-->
+<!--<div id="loading">-->
+<!--    <div id="loading-center">-->
+<!--    </div>-->
+<!--</div>-->
+<!--&lt;!&ndash; loader END &ndash;&gt;-->
+<!--&lt;!&ndash; Wrapper Start &ndash;&gt;-->
+<!--<div class="wrapper">-->
+<!--    <div th:replace="header :: header"></div>-->
+
+<!--    <div class="content-page">-->
+<!--&lt;!&ndash;        <div class="form-inline">&ndash;&gt;-->
+<!--&lt;!&ndash;            <a href="/ajouterFournisseur" class="btn btn-primary">Nouveau Fourniseur</a>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div th:if="${messageFournisseurA}" class="alert alert-success" role="alert">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="iq-alert-text">  <p th:text="${messageFournisseurA}"></p> </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div th:if="${messageFournisseurS}" class="alert alert-success" role="alert">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="iq-alert-text">  <p th:text="${messageFournisseurS}"></p> </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div th:if="${messageFournisseurE}" class="alert alert-success" role="alert">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="iq-alert-text">  <p th:text="${messageFournisseurE}"></p> </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        <div class="form-inline">-->
+<!--            <a href="/commander" class="btn btn-primary">Nouvelle Commande</a>-->
+<!--        </div>-->
+<!--        <div th:if="${messageCommandeValide}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${messageCommandeValide}"></p> </div>-->
+<!--        </div>-->
+<!--        <table id="table" class="table data-table table-striped table-bordered">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th scope="col">Id</th>-->
+<!--                <th scope="col">Article</th>-->
+<!--                <th scope="col">Quantite</th>-->
+<!--                <th scope="col">Statut</th>-->
+<!--                <th scope="col">Date</th>-->
+<!--                <th scope="col" style="display:none;">Date Sort</th>-->
+<!--                <th scope="col">Détails</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="commande:${commandesVue}">-->
+<!--                <td th:text="${commande[0]}"></td>-->
+<!--                <td th:text="${commande[3]}"></td>-->
+<!--                <td th:text="${commande[1]}"></td>-->
+<!--                <td style="width: 10%;" th:switch="${commande[6]}">-->
+<!--                    <span style="color: #2b8420;" th:case="true" th:text="'Validé'">Validé</span>-->
+<!--                    <span style="color: #6c757d;" th:case="false" th:text="'En cours'">Non Validé</span>-->
+<!--                </td>-->
+<!--                <td th:text="${#dates.format(commande[2], 'dd/MM/yyyy')}"></td>-->
+<!--                <td th:text="${#dates.format(commande[2], 'yyyy-MM-dd')}" style="display:none;"></td>-->
+<!--                <td>-->
+<!--                    <a class="btn btn-sm btn-outline-success" th:href="@{BonCommande(id=${commande[0]})}" >Voir</a>-->
+
+<!--                    &lt;!&ndash;                    <a class="btn btn-outline-secondary" th:href="@{editArticle(id=${article.id})}" >Modifier</a>&ndash;&gt;-->
+<!--                </td>-->
+<!--                &lt;!&ndash;                <td>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    <a class="btn btn-sm btn-outline-danger" th:href="@{deleteCommande(id=${commande[0]})}" onclick="return confirm('Voulez vraiment supprime cette commande !')">Supprimer</a>&ndash;&gt;-->
+
+<!--                &lt;!&ndash;                </td>&ndash;&gt;-->
+
+
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div th:replace="footer :: footer"></div>-->
+<!--<script src="../assets/js/backend-bundle.min.js"></script>-->
+<!--&lt;!&ndash; Chart Custom JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/customizer.js"></script>-->
+
+<!--<script src="../assets/js/sidebar.js"></script>-->
+
+<!--&lt;!&ndash; Flextree Javascript&ndash;&gt;-->
+<!--<script src="../assets/js/flex-tree.min.js"></script>-->
+<!--<script src="../assets/js/tree.js"></script>-->
+
+<!--&lt;!&ndash; Table Treeview JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/table-treeview.js"></script>-->
+
+<!--&lt;!&ndash; SweetAlert JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/sweetalert.js"></script>-->
+
+<!--&lt;!&ndash; Vectoe Map JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/vector-map-custom.js"></script>-->
+
+<!--&lt;!&ndash; Chart Custom JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/chart-custom.js"></script>-->
+<!--<script src="../assets/js/charts/01.js"></script>-->
+<!--<script src="../assets/js/charts/02.js"></script>-->
+
+<!--&lt;!&ndash; slider JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/slider.js"></script>-->
+
+<!--&lt;!&ndash; Emoji picker &ndash;&gt;-->
+<!--<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>-->
+
+
+<!--&lt;!&ndash; app JavaScript &ndash;&gt;-->
+<!--<script src="../assets/js/app.js"></script>-->
+<!--&lt;!&ndash; DataTables French language file &ndash;&gt;-->
+<!--<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"></script>-->
+
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--        // Check if the flash attribute message is present-->
+<!--        var message = /*[[${message}]]*/ '';-->
+<!--        if (message !== '') {-->
+<!--            alert(message);  // Display a popup alert with the message-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--        $("#loading").fadeOut();-->
+
+<!--        // Détruire l'instance existante de DataTables si elle existe-->
+<!--        if ($.fn.DataTable.isDataTable('#table')) {-->
+<!--            $('#table').DataTable().destroy();-->
+<!--        }-->
+
+<!--        // Initialiser DataTables-->
+<!--        // $('#table').DataTable({-->
+<!--        //     "language": {-->
+<!--        //         "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"-->
+<!--        //     }-->
+<!--        // });-->
+<!--        // Initialiser DataTables avec tri et configuration de la langue-->
+<!--        $('#table').DataTable({-->
+
+<!--            "language": {-->
+<!--                "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"-->
+<!--            }-->
+<!--        });-->
+
+
+
+
+<!--        $('[data-toggle="popover"]').popover();-->
+<!--    });-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->

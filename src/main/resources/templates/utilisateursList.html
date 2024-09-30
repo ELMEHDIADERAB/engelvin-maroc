@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" />
+
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">
+    <title>Membres</title>
+    <style>
+        .table {
+            width: 92%;
+            margin-bottom: 1.25rem;
+            color: #324253;
+            margin-left: 45px;
+            margin-right: 100px;
+            margin-top: 50px;
+        }
+        .form-inline {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin: 20px 45px;
+        }
+    </style>
+</head>
+
+<body class="  ">
+<!-- loader Start -->
+<div id="loading">
+    <div id="loading-center">
+    </div>
+</div>
+<!-- loader END -->
+<!-- Wrapper Start -->
+<div class="wrapper">
+    <div th:replace="header :: header"></div>
+
+    <div class="content-page">
+        <div class="form-inline">
+            <a href="/ajouterUtilisateur" class="btn btn-primary">Nouveau Utilisateur</a>
+        </div>
+<!--        <div th:if="${msgUtilisateurA}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${msgUtilisateurA}"></p> </div>-->
+<!--        </div>-->
+<!--        <div th:if="${msgUtilisateurE}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${msgUtilisateurE}"></p> </div>-->
+<!--        </div>-->
+<!--        <div th:if="${msgUtilisateurS}" class="alert alert-success" role="alert">-->
+<!--            <div class="iq-alert-text">  <p th:text="${msgUtilisateurS}"></p> </div>-->
+<!--        </div>-->
+        <table id="table" class="table data-table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Nom</th>
+<!--                <th scope="col">Prénom</th>-->
+                <th scope="col">Email</th>
+                <th scope="col">Action</th>
+                <th scope="col" >Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="utilisateur:${utilisateursVue}">
+                <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif" th:text="${#strings.toUpperCase(utilisateur.nom)} + ' ' + ${#strings.toUpperCase(utilisateur.prenom)}"></td>
+<!--                <td th:text="${utilisateur.prenom}"></td>-->
+                <td th:text="${utilisateur.email}"></td>
+                <td>
+                    <a class="btn btn-outline-danger" th:href="@{deleteUtilisateur(id=${utilisateur.id})}" onclick="return confirm('Voulez-vous vraiment supprimer ?')">Supprimer</a>
+                </td>
+                <td>
+                    <a class="btn btn-outline-secondary" th:href="@{editUtilisateur(id=${utilisateur.id})}">Modifier</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- Modal pour les erreurs -->
+        <div th:if="${msgUtilisateurA}" class="modal fade" id="ModalA" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabelA">Insertion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p th:text="${msgUtilisateurA}"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal pour les erreurs -->
+        <div th:if="${msgUtilisateurE}" class="modal fade" id="ModalE" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabelE">Modification</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p th:text="${msgUtilisateurE}"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal pour les erreurs -->
+        <div th:if="${msgUtilisateurS}" class="modal fade" id="ModalS" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabelS">Suppression</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p th:text="${msgUtilisateurS}"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="footer :: footer"></div>
+
+<script src="../assets/js/backend-bundle.min.js"></script>
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/customizer.js"></script>
+
+<script src="../assets/js/sidebar.js"></script>
+
+<!-- Flextree Javascript-->
+<script src="../assets/js/flex-tree.min.js"></script>
+<script src="../assets/js/tree.js"></script>
+
+<!-- Table Treeview JavaScript -->
+<script src="../assets/js/table-treeview.js"></script>
+
+<!-- SweetAlert JavaScript -->
+<script src="../assets/js/sweetalert.js"></script>
+
+<!-- Vectoe Map JavaScript -->
+<script src="../assets/js/vector-map-custom.js"></script>
+
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/chart-custom.js"></script>
+<script src="../assets/js/charts/01.js"></script>
+<script src="../assets/js/charts/02.js"></script>
+
+<!-- slider JavaScript -->
+<script src="../assets/js/slider.js"></script>
+
+<!-- Emoji picker -->
+<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"></script>
+<!-- app JavaScript -->
+<script src="../assets/js/app.js"></script>
+<script>
+    $(document).ready(function() {
+        // Check if the flash attribute message is present
+        var message = /*[[${message}]]*/ '';
+        if (message !== '') {
+            alert(message);  // Display a popup alert with the message
+        }
+    });
+</script>
+<!-- Script pour afficher le modal automatiquement si messagePE est présent -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#ModalA').modal('show');
+        }
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#ModalE').modal('show');
+        }
+        if ($('.modal-body').text().trim().length > 0) {
+            $('#ModalS').modal('show');
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $("#loading").fadeOut();
+
+        // Détruire l'instance existante de DataTables si elle existe
+        if ($.fn.DataTable.isDataTable('#table')) {
+            $('#table').DataTable().destroy();
+        }
+
+        // Initialiser DataTables
+        $('#table').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"
+            }
+        });
+
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
+</body>
+</html>

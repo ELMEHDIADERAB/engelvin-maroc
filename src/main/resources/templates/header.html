@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/favicon.ico"/>
+
+    <link rel="stylesheet" href="../assets/css/backend-plugin.min.css">
+    <link rel="stylesheet" href="../assets/css/backend.css?v=1.0.0">
+    <style>
+        body {
+            background-color: #f0f2f5; /* Remplacez cette couleur par celle que vous préférez */
+        }
+        .iq-sidebar {
+            background-color: #ffffff; /* Couleur de fond pour la barre latérale */
+        }
+
+        .iq-top-navbar {
+            background-color: #343a40; /* Couleur de fond pour la barre de navigation */
+        }
+        .submenu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0;
+        }
+        .submenu.show {
+            max-height: 200px; /* ou toute autre valeur appropriée */
+        }
+        .dropdown-menu a:hover {
+            background-color: #f0f2f5; /* une couleur légèrement différente de l'arrière-plan */
+            color: #343a40; /* couleur de texte contrastante */
+        }
+
+
+    </style>
+</head>
+<body class="  ">
+<!-- loader Start -->
+<div id="loading">
+    <div id="loading-center">
+    </div>
+</div>
+<!-- loader END -->
+<!-- Wrapper Start -->
+<div th:fragment="header" class="wrapper">
+    <div class="iq-sidebar  sidebar-default">
+        <div class="iq-sidebar-logo d-flex align-items-end justify-content-between">
+            <a href="/dashboard" class="header-logo">
+                <img src="../assets/images/logo2.png" class="img-fluid rounded-normal light-logo" alt="logo">
+                <img src="../assets/images/logo2.png" class="img-fluid rounded-normal d-none sidebar-light-img" alt="logo">
+                <span>Engelvin Maroc</span>
+            </a>
+            <div class="side-menu-bt-sidebar-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="text-light wrapper-menu" width="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+        </div>
+        <div class="data-scrollbar" data-scroll="1">
+            <nav class="iq-sidebar-menu">
+                <ul id="iq-sidebar-toggle" class="side-menu">
+                    <li class="active sidebar-layout">
+                        <a href="/dashboard" class="svg-icon">
+                            <i class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                            </i>
+                            <span class="ml-2">Tableau de bord</span>
+                        </a>
+                    </li>
+                    <li class="px-3 pt-3 pb-2">
+                        <span class="text-uppercase small font-weight-bold">Pages</span>
+                    </li>
+
+                    <!-- fournisseur-->
+                    <li class="sidebar-layout">
+                        <a href="#app1" class="collapsed svg-icon" data-toggle="collapse" aria-expanded="false" aria-controls="app1">
+                            <i>
+                                <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </i>
+                            <span class="ml-2">Fournisseurs</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon iq-arrow-right arrow-active" width="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <ul id="app1" class="submenu collapse" data-parent="#iq-sidebar-toggle">
+                            <li class=" sidebar-layout">
+                                <a href="/fournisseursList" class="svg-icon">
+                                    <i class="">
+                                        <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </i><span>Liste Fournisseurs</span>
+                                </a>
+                            </li>
+                            <li class=" sidebar-layout">
+                                <a href="/ajouterFournisseur" class="svg-icon">
+                                    <i class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                        </svg>
+                                    </i><span>Nouveau Fournisseur</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--                    <li class="sidebar-layout">-->
+<!--                        <a href="#app1" class="collapsed svg-icon" data-toggle="collapse" aria-expanded="false">-->
+<!--                            <i>-->
+<!--                                <svg class="svg-icon" id="iq-user-1-1" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"-->
+<!--                                          d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />-->
+<!--                                </svg>-->
+<!--                            </i>-->
+<!--                            <span class="ml-2">Fournisseurs</span>-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon iq-arrow-right arrow-active" width="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />-->
+<!--                            </svg>-->
+<!--                        </a>-->
+<!--                        <ul id="app1" class="submenu collapse" data-parent="#iq-sidebar-toggle">-->
+<!--                            <li class=" sidebar-layout">-->
+<!--                                <a href="/fournisseursList" class="svg-icon">-->
+<!--                                    <i class=""><svg class="svg-icon" id="iq-user-1-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"-->
+<!--                                              d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />-->
+<!--                                    </svg>-->
+<!--                                    </i><span class="">Liste Fournisseurs</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li class=" sidebar-layout">-->
+<!--                                <a href="/ajouterFournisseur" class="svg-icon">-->
+<!--                                    <i class="">-->
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />-->
+<!--                                        </svg>-->
+<!--                                    </i><span class="">Nouveau Fournisseur</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+                    <!--article-->
+                    <li class="sidebar-layout">
+                        <a href="#app2" class="collapsed svg-icon" data-toggle="collapse" aria-expanded="false">
+                            <i>
+                                <svg class="svg-icon" width="18" id="iq-ui-1-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" style="stroke-dasharray: 84, 104; stroke-dashoffset: 0;"></path>
+                                </svg>
+                            </i>
+                            <span class="ml-2">Articles</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon iq-arrow-right arrow-active" width="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <ul id="app2" class="submenu collapse" data-parent="#iq-sidebar-toggle">
+                            <li class=" sidebar-layout">
+                                <a href="/articlesList" class="svg-icon">
+                                    <i class="">
+                                        <svg class="svg-icon" width="18" id="iq-ui-1-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" style="stroke-dasharray: 84, 104; stroke-dashoffset: 0;"></path>
+                                        </svg>
+                                    </i><span class="">Liste Articles</span>
+                                </a>
+                            </li>
+                            <li class=" sidebar-layout">
+                                <a href="/ajouterArticle" class="svg-icon">
+                                    <i class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                        </svg>
+                                    </i><span class="">Nouveau Article</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--utilisateur-->
+                    <li class="sidebar-layout">
+                        <a href="#app3" class="collapsed svg-icon" data-toggle="collapse" aria-expanded="false">
+                            <i>
+                                <svg class="svg-icon" id="iq-user-1-1" xmlns="http://www.w3.org/2000/svg"
+                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </i>
+                            <span class="ml-2">Utilisateurs</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon iq-arrow-right arrow-active" width="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <ul id="app3" class="submenu collapse" data-parent="#iq-sidebar-toggle">
+                            <li class=" sidebar-layout">
+                                <a href="/ajouterUtilisateur" class="svg-icon">
+                                    <i class="">
+                                        <svg class="svg-icon" id="iq-user-1-1" xmlns="http://www.w3.org/2000/svg"
+                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>                          </i><span class="">Nouveau Utilisateurs</span>
+                                </a>
+                            </li>
+                            <li class=" sidebar-layout">
+                                <a href="/utilisateurs" class="svg-icon">
+                                    <i class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                        </svg>
+                                    </i><span class="">Liste des Utilisateur</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--commande-->
+                    <li class="sidebar-layout">
+                        <a href="#cmd" class="collapsed svg-icon" data-toggle="collapse" aria-expanded="false">
+                            <i>
+                                <svg class="svg-icon" width="18" id="iq-ui-1-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" style="stroke-dasharray: 84, 104; stroke-dashoffset: 0;"></path>
+                                </svg>
+                            </i>
+                            <span class="ml-2">Commandes</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon iq-arrow-right arrow-active" width="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <ul id="cmd" class="submenu collapse" data-parent="#iq-sidebar-toggle">
+                            <li th:if="${#authorization.expression('hasRole(''Directeur'')')}" class=" sidebar-layout">
+                                <a href="/commander" class="svg-icon">
+                                    <i class="" >
+                                        <svg class="svg-icon" width="18" id="iq-ui-1-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" style="stroke-dasharray: 84, 104; stroke-dashoffset: 0;"></path>
+                                        </svg>
+                                    </i><span class="">Passer commande</span>
+                                </a>
+                            </li>
+                            <li class=" sidebar-layout">
+                                <a href="/commande" class="svg-icon">
+                                    <i class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                        </svg>
+                                    </i><span class="">Liste des Commandes</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="pt-5 pb-5"></div>
+        </div>
+    </div>
+    <!--Navbar-->
+    <div class="iq-top-navbar">
+        <div class="iq-navbar-custom">
+            <nav class="navbar navbar-expand-lg navbar-light p-0">
+                <div class="side-menu-bt-sidebar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="text-secondary wrapper-menu" width="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"  aria-label="Toggle navigation">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="text-secondary" width="30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ml-auto navbar-list align-items-center">
+
+                            <li class="nav-item nav-icon dropdown">
+                                <a href="#" class="nav-item nav-icon dropdown-toggle pr-0 search-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+<!--                                    <img src="../assets/images/user/1.jpg" class="img-fluid avatar-rounded" alt="user">-->
+                                    <span class="mb-0 ml-2 user-name" th:text="${#strings.toUpperCase( nom+' '+prenom)}"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+<!--                                    <li class="dropdown-item d-flex svg-icon">-->
+
+<!--&lt;!&ndash;                                        <a href="../app/user-profile.html"><span th:text="${role}"></span></a>&ndash;&gt;-->
+<!--                                    </li>-->
+                                    <a href="/modifierProfile">
+                                    <li class="dropdown-item d-flex svg-icon">
+                                        <svg class="svg-icon mr-0 text-secondary" id="h-01-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        &nbsp; Profile
+                                    </li>
+                                    </a>
+                                    <a th:href="@{/logout}">
+                                        <li class="dropdown-item  d-flex svg-icon border-top">
+                                        <svg class="svg-icon mr-0 text-secondary" id="h-05-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
+                                        Déconnexion
+                                    </li>
+                                    </a>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+<!--end Navbar-->
+</div>
+<!-- Wrapper End-->
+
+<script src="../assets/js/backend-bundle.min.js"></script>
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/customizer.js"></script>
+
+<script src="../assets/js/sidebar.js"></script>
+
+<!-- Flextree Javascript-->
+<script src="../assets/js/flex-tree.min.js"></script>
+<script src="../assets/js/tree.js"></script>
+
+<!-- Table Treeview JavaScript -->
+<script src="../assets/js/table-treeview.js"></script>
+
+<!-- SweetAlert JavaScript -->
+<script src="../assets/js/sweetalert.js"></script>
+
+<!-- Vectoe Map JavaScript -->
+<script src="../assets/js/vector-map-custom.js"></script>
+
+<!-- Chart Custom JavaScript -->
+<script src="../assets/js/chart-custom.js"></script>
+<script src="../assets/js/charts/01.js"></script>
+<script src="../assets/js/charts/02.js"></script>
+
+<!-- slider JavaScript -->
+<script src="../assets/js/slider.js"></script>
+
+<!-- Emoji picker -->
+<script src="../assets/vendor/emoji-picker-element/index.js" type="module"></script>
+
+
+<!-- app JavaScript -->
+<script src="../assets/js/app.js"></script>  </body>
+</html>
